@@ -63,6 +63,7 @@ class Home extends React.Component {
                                 _delete={this.delete}
                                 _edit={this.edit}
                             />
+                            <span class='footer-element pull-right'><label> Assignment hema-karki </label></span>
                     </div>
                 </div>
             </div>
