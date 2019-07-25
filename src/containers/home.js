@@ -29,6 +29,7 @@ class Home extends React.Component {
             list[this.indexValue] = this.refs.demo.value;
             this.setState({list});
             this.refs.demo.value = '';
+            this.indexValue = null;
             this.state.button = 'Add';
         }
     }
