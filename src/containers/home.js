@@ -14,18 +14,35 @@ class Home extends React.Component {
             list:[]
         };
        this.delete = this.delete.bind(this);
+       this.edit = this.edit.bind(this);
        this.onSave = this.onSave.bind(this);
+       this.indexValue = null;
     }
 
     onSave(){
-       const list = this.state.list;
-       list.push(this.refs.demo.value);
-        this.setState({list});
-        this.refs.demo.value = '';
+        const list = this.state.list;
+        if (this.indexValue == null) {
+            list.push(this.refs.demo.value);
+            this.setState({list});
+            this.refs.demo.value = '';
+        } else {
+            list[this.indexValue] = this.refs.demo.value;
+            this.setState({list});
+            this.refs.demo.value = '';
+            this.state.button = 'Add';
+        }
     }
     delete(i){
             this.state.list.splice(i);
             this.setState(this.state.list);
+    }
+    edit(i){
+        this.indexValue = i;
+        let button = this.state.button;
+        button = 'Edit';
+        this.setState({button});
+        let value = this.state.list[i];
+        this.refs.demo.value = value;
     }
     render() {
         return (
@@ -44,6 +61,7 @@ class Home extends React.Component {
                             <List 
                                 list={this.state.list} 
                                 _delete={this.delete}
+                                _edit={this.edit}
                             />
                     </div>
                 </div>
