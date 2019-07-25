@@ -24,7 +24,8 @@ class Home extends React.Component {
         this.refs.demo.value = '';
     }
     delete(i){
-        console.log('delete',i);
+            this.state.list.splice(i);
+            this.setState(this.state.list);
     }
     render() {
         return (
