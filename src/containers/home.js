@@ -2,72 +2,94 @@ import React from 'react';
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
+import { Link } from "react-router-dom";
 import List from '../components/list';
+import { Card, CardImg, CardText, CardBody,
+    CardTitle,  Button, FormGroup, Label, Collapse } from 'reactstrap';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: 'Todo Demo App',
+            name: 'Add Todo',
             value: '',
             button: 'Add',
-            list:[]
+            list:[],
+            collapse: false
         };
        this.delete = this.delete.bind(this);
-       this.edit = this.edit.bind(this);
        this.onSave = this.onSave.bind(this);
-       this.indexValue = null;
+       this.toggle = this.toggle.bind(this);
     }
 
     onSave(){
-        const list = this.state.list;
-        if (this.indexValue == null) {
-            list.push(this.refs.demo.value);
-            this.setState({list});
-            this.refs.demo.value = '';
-        } else {
-            list[this.indexValue] = this.refs.demo.value;
-            this.setState({list});
-            this.refs.demo.value = '';
-            this.indexValue = null;
-            this.state.button = 'Add';
-        }
+       const list = this.state.list;
+       if(this.refs.demo.value.trim().length > 0){
+        list.push(this.refs.demo.value);
+       }
+       
+        this.setState({list});
+        this.refs.demo.value = '';
     }
-    delete(i){
-            this.state.list.splice(i);
-            this.setState(this.state.list);
+    delete(index){ 
+        this.state.list.splice(index,1);
+        this.setState({...this.state});
     }
-    edit(i){
-        this.indexValue = i;
-        let button = this.state.button;
-        button = 'Edit';
-        this.setState({button});
-        let value = this.state.list[i];
-        this.refs.demo.value = value;
-    }
+    toggle() {
+        this.setState({ collapse: !this.state.collapse });
+      }
     render() {
         return (
             <div className="container-fluid">
+            <Card>
+             <CardImg top width="100%" height="400px" src="./images/react-img.png" alt="Card image cap" />
+                <CardBody>
+                <CardTitle>React Training</CardTitle>
+                <CardText>React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called “components”.</CardText>
                 <div className="row">
-                    <div className="col-12">
-                        <h1>{this.state.name}</h1>
-                        <input 
+                    <div className="col-sm-4">                    
+                        <FormGroup>
+                        <Label for="todo">{this.state.name}</Label>
+                           <input 
                             type="text"
                             ref="demo"
+                            className="form-control"
                             //onChange={(event) =>  this.setState({value: event.target.value })}
                             //value={this.state.value}
                             />
-                            <button onClick={this.onSave}>{this.state.button}</button>
+                              </FormGroup>
+                           
+                           
+                           <FormGroup>
+                            <Button onClick={this.onSave}>{this.state.button}</Button>
+                            </FormGroup>
+                            </div>
+                            <div className="col-sm-6">
+                            <FormGroup>
+                            <Label for="todo">Todo List</Label>
                             <br/>
-                            <List 
-                                list={this.state.list} 
-                                _delete={this.delete}
-                                _edit={this.edit}
-                            />
-                            <span class='footer-element pull-right'><label> Assignment hema-karki </label></span>
-                    </div>
+                            <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>View List</Button>
+                        <Collapse isOpen={this.state.collapse}>
+                        <Card>
+                            <CardBody>
+                                {this.state.list.length > 0 ?
+                                 <List 
+                                    list={this.state.list} 
+                                    _delete={this.delete}
+                                /> 
+                                :
+                                'Empty list!'
+                                }
+                           
+                            </CardBody>
+                        </Card>
+                        </Collapse>
+                        </FormGroup>   
+                         </div>
+                        </div>
+                        </CardBody>
+                    </Card>                
                 </div>
-            </div>
         );
     }
 }
